@@ -1,6 +1,6 @@
 import {useRef, useState} from "react";
 import Konva from "konva";
-import {Circle, Layer, Rect, Stage} from "react-konva";
+import {Circle, Layer, Stage} from "react-konva";
 import React from "react";
 import {TCircleShape} from "../../types/types";
 
@@ -36,7 +36,7 @@ export default function Canvas () {
         stage.batchDraw()
     }
 
-    const handleAddCircle = (evt: any) => {
+    const handleAddCircle = () => {
         const stage = stageRef.current
         if (!stage) return;
 
