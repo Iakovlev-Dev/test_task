@@ -1,5 +1,12 @@
-export default function App () {
+import Canvas from "../canvas/canvas";
+
+const App = () => {
+
     return (
-        <h1>Hello</h1>
+        <div className='app'>
+            <Canvas/>
+        </div>
     )
-}
+};
+
+export default App;
