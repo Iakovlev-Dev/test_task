@@ -1,12 +1,13 @@
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import Konva from "konva";
-import {Circle, Layer, Stage} from "react-konva";
+import {Circle, Layer, Rect, RegularPolygon, Stage} from "react-konva";
 import React from "react";
 import {TCircleShape, TShape} from "../../types/types";
 import {KonvaEventObject} from "konva/lib/Node";
 import {useAppSelector} from "../../types/type-store";
 import {selectShape} from "../../store/data-process/selectors";
 import {setShape} from "../../store/data-process/data-process";
+import {renderShapes} from "../../utils";
 
 export default function Canvas () {
     const stageRef = useRef<Konva.Stage>(null)
@@ -15,6 +16,9 @@ export default function Canvas () {
     const [shapes, setShapes] = useState<TCircleShape[]>([])
     const [selectedShape, setSelectedShape] = useState<TShape>(currentShape)
 
+    useEffect(() => {
+        setSelectedShape(currentShape)
+    }, [currentShape]);
 
     const handleWheel = (e: any) => {
         e.evt.preventDefault()
@@ -50,7 +54,7 @@ export default function Canvas () {
         const pointerPosition = stage.getPointerPosition()
         if(!pointerPosition) return;
 
-        const newCircle: TCircleShape = {
+        const newShape: TCircleShape = {
             id: `circle_${shapes.length + 1}`,
             type: selectedShape,
             x: pointerPosition.x,
@@ -59,7 +63,8 @@ export default function Canvas () {
             color: "black"
         }
 
-        setShapes([...shapes, newCircle])
+        setShapes([...shapes, newShape])
+        console.log(shapes)
     }
 
     const handleDragMove = (evt:  KonvaEventObject<DragEvent>, id: string) => {
@@ -83,17 +88,7 @@ export default function Canvas () {
             style={{backgroundColor: '#f4f4f4'}}
         >
             <Layer>
-                {shapes.map((shape) => (
-                    <Circle
-                    key={shape.id}
-                    x={shape.x}
-                    y={shape.y}
-                    radius={shape.size}
-                    fill={shape.color}
-                    draggable
-                    onDragMove={(evt) => handleDragMove(evt, shape.id)}
-                    />
-                ))}
+                {renderShapes(shapes, handleDragMove)}
             </Layer>
         </Stage>
     )
