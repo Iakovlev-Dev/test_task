@@ -10,3 +10,7 @@ body {
     align-items: center;
     height: 100vh;
 }
+
+.button {
+    height: 30px;
+}

@@ -1,13 +1,13 @@
 import React from "react";
 import Canvas from "../canvas/canvas";
+import Buttons from "../buttons/buttons";
 
-const App = () => {
-
+export default function App ()  {
     return (
         <div className='app'>
-            <Canvas/>
+            <Buttons />
+            <Canvas />
         </div>
     )
 };
 
-export default App;
