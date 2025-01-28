@@ -3,6 +3,7 @@ import Konva from "konva";
 import {Circle, Layer, Stage} from "react-konva";
 import React from "react";
 import {TCircleShape} from "../../types/types";
+import {KonvaEventObject} from "konva/lib/Node";
 
 export default function Canvas () {
     const stageRef = useRef<Konva.Stage>(null)
@@ -54,6 +55,16 @@ export default function Canvas () {
         setCircles([...circles, newCircle])
     }
 
+    const handleDragMove = (evt:  KonvaEventObject<DragEvent>, id: string) => {
+        const {x, y} = evt.target.position();
+
+        setCircles((prevCircles) =>
+            prevCircles.map((circle) =>
+                circle.id === id ? { ...circle, x, y} : circle
+            )
+        )
+    }
+
     return (
         <Stage
             ref={stageRef}
@@ -73,6 +84,7 @@ export default function Canvas () {
                     radius={circle.radius}
                     fill={circle.color}
                     draggable
+                    onDragMove={(evt) => handleDragMove(evt, circle.id)}
                     />
                 ))}
             </Layer>
