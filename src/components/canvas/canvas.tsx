@@ -10,6 +10,7 @@ export default function Canvas () {
 
     const [circles, setCircles] = useState<TCircleShape[]>([])
 
+
     const handleWheel = (e: any) => {
         e.evt.preventDefault()
         const scaleBy = 1.1;
