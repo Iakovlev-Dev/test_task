@@ -6,7 +6,7 @@ type TInitialState = {
     shape: TShape
 }
 
-const initialState = {
+const initialState: TInitialState = {
     shape: 'circle'
 }
 

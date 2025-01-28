@@ -2,17 +2,18 @@ import {useRef, useState} from "react";
 import Konva from "konva";
 import {Circle, Layer, Stage} from "react-konva";
 import React from "react";
-import {TCircleShape} from "../../types/types";
+import {TCircleShape, TShape} from "../../types/types";
 import {KonvaEventObject} from "konva/lib/Node";
 import {useAppSelector} from "../../types/type-store";
 import {selectShape} from "../../store/data-process/selectors";
+import {setShape} from "../../store/data-process/data-process";
 
 export default function Canvas () {
     const stageRef = useRef<Konva.Stage>(null)
     const currentShape = useAppSelector(selectShape)
-    console.log(currentShape)
 
-    const [circles, setCircles] = useState<TCircleShape[]>([])
+    const [shapes, setShapes] = useState<TCircleShape[]>([])
+    const [selectedShape, setSelectedShape] = useState<TShape>(currentShape)
 
 
     const handleWheel = (e: any) => {
@@ -50,22 +51,23 @@ export default function Canvas () {
         if(!pointerPosition) return;
 
         const newCircle: TCircleShape = {
-            id: `circle_${circles.length + 1}`,
+            id: `circle_${shapes.length + 1}`,
+            type: selectedShape,
             x: pointerPosition.x,
             y: pointerPosition.y,
-            radius: 30,
+            size: 30,
             color: "black"
         }
 
-        setCircles([...circles, newCircle])
+        setShapes([...shapes, newCircle])
     }
 
     const handleDragMove = (evt:  KonvaEventObject<DragEvent>, id: string) => {
         const {x, y} = evt.target.position();
 
-        setCircles((prevCircles) =>
-            prevCircles.map((circle) =>
-                circle.id === id ? { ...circle, x, y} : circle
+        setShape((prevShapes: TCircleShape[]) =>
+            prevShapes.map((shape) =>
+                shape.id === id ? { ...shape, x, y} : shape
             )
         )
     }
@@ -81,15 +83,15 @@ export default function Canvas () {
             style={{backgroundColor: '#f4f4f4'}}
         >
             <Layer>
-                {circles.map((circle) => (
+                {shapes.map((shape) => (
                     <Circle
-                    key={circle.id}
-                    x={circle.x}
-                    y={circle.y}
-                    radius={circle.radius}
-                    fill={circle.color}
+                    key={shape.id}
+                    x={shape.x}
+                    y={shape.y}
+                    radius={shape.size}
+                    fill={shape.color}
                     draggable
-                    onDragMove={(evt) => handleDragMove(evt, circle.id)}
+                    onDragMove={(evt) => handleDragMove(evt, shape.id)}
                     />
                 ))}
             </Layer>
