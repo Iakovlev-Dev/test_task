@@ -1,14 +1,19 @@
-import {useRef} from "react";
+import {useRef, useState} from "react";
 import Konva from "konva";
-import {Layer, Rect, Stage} from "react-konva";
+import {Circle, Layer, Rect, Stage} from "react-konva";
+import React from "react";
+import {TCircleShape} from "../../types/types";
 
 export default function Canvas () {
     const stageRef = useRef<Konva.Stage>(null)
+
+    const [circles, setCircles] = useState<TCircleShape[]>([])
 
     const handleWheel = (e: any) => {
         e.evt.preventDefault()
         const scaleBy = 1.1;
         const stage = stageRef.current
+        if(!stage) return;
         const oldScale = stage.scaleX()
         const pointer = stage.getPointerPosition()
 
@@ -31,6 +36,24 @@ export default function Canvas () {
         stage.batchDraw()
     }
 
+    const handleAddCircle = (evt: any) => {
+        const stage = stageRef.current
+        if (!stage) return;
+
+        const pointerPosition = stage.getPointerPosition()
+        if(!pointerPosition) return;
+
+        const newCircle: TCircleShape = {
+            id: `circle_${circles.length + 1}`,
+            x: pointerPosition.x,
+            y: pointerPosition.y,
+            radius: 30,
+            color: "black"
+        }
+
+        setCircles([...circles, newCircle])
+    }
+
     return (
         <Stage
             ref={stageRef}
@@ -38,17 +61,20 @@ export default function Canvas () {
             height={window.innerHeight}
             draggable
             onWheel={handleWheel}
+            onClick={handleAddCircle}
             style={{backgroundColor: '#f4f4f4'}}
         >
             <Layer>
-                <Rect
-                    x={50}
-                    y={50}
-                    width={100}
-                    height={100}
-                    fill="red"
+                {circles.map((circle) => (
+                    <Circle
+                    key={circle.id}
+                    x={circle.x}
+                    y={circle.y}
+                    radius={circle.radius}
+                    fill={circle.color}
                     draggable
-                />
+                    />
+                ))}
             </Layer>
         </Stage>
     )
