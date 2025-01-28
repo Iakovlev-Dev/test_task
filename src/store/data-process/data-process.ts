@@ -13,5 +13,11 @@ const initialState = {
 export const dataProcess = createSlice({
     name: NameSpace.Data,
     initialState,
-    reducers: {}
+    reducers: {
+        setShape( state, action) {
+            state.shape = action.payload;
+        }
+    }
 })
+
+export const {setShape} = dataProcess.actions

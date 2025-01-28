@@ -4,9 +4,13 @@ import {Circle, Layer, Stage} from "react-konva";
 import React from "react";
 import {TCircleShape} from "../../types/types";
 import {KonvaEventObject} from "konva/lib/Node";
+import {useAppSelector} from "../../types/type-store";
+import {selectShape} from "../../store/data-process/selectors";
 
 export default function Canvas () {
     const stageRef = useRef<Konva.Stage>(null)
+    const currentShape = useAppSelector(selectShape)
+    console.log(currentShape)
 
     const [circles, setCircles] = useState<TCircleShape[]>([])
 

@@ -1,11 +1,15 @@
 import React from "react";
+import {setShape} from "../../store/data-process/data-process";
+import {Shapes} from "../../const";
+import {useAppDispatch} from "../../types/type-store";
 
 export default function Buttons () {
+    const dispatch = useAppDispatch()
     return (
         <div className="buttons">
-            <button className="button" name={'прямоугольник'}>прямоугольник</button>
-            <button className="button" name={'круг'}>круг</button>
-            <button className="button" name={'треугольник'}>треугольник</button>
+            {Object.keys(Shapes).map((shape) => (
+                <button className="button" onClick={() => dispatch(setShape(shape))} key={shape}>{Shapes[shape]}</button>
+            ))}
         </div>
     )
 }
