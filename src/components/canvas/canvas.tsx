@@ -1,6 +1,6 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState, WheelEventHandler} from "react";
 import Konva from "konva";
-import {Circle, Layer, Rect, RegularPolygon, Stage} from "react-konva";
+import {Layer, Stage} from "react-konva";
 import React from "react";
 import {TCircleShape, TShape} from "../../types/types";
 import {KonvaEventObject} from "konva/lib/Node";
@@ -15,36 +15,42 @@ export default function Canvas () {
 
     const [shapes, setShapes] = useState<TCircleShape[]>([])
     const [selectedShape, setSelectedShape] = useState<TShape>(currentShape)
+    const [scale, setScale] = useState(1)
 
     useEffect(() => {
         setSelectedShape(currentShape)
     }, [currentShape]);
 
-    const handleWheel = (e: any) => {
-        e.evt.preventDefault()
+    const handleWheel = (evt: any) => {
+        evt.evt.preventDefault()
         const scaleBy = 1.1;
         const stage = stageRef.current
+
         if(!stage) return;
+
         const oldScale = stage.scaleX()
         const pointer = stage.getPointerPosition()
 
         if(!pointer) return;
+
+        const direction = evt.evt.deltaY > 0 ? -1 : 1;
+        const newScale = direction > 0 ? oldScale * scaleBy: oldScale / scaleBy;
 
         const mousePointTo = {
             x: (pointer.x - stage.x()) / oldScale,
             y: (pointer.y - stage.y()) / oldScale,
         }
 
-        const newScale = e.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy
-
-        stage.scale({x: newScale, y: newScale})
-
-        const newPos = {
+        const newPosition = {
             x: pointer.x - mousePointTo.x * newScale,
             y: pointer.y - mousePointTo.y * newScale,
         }
-        stage.position(newPos)
+
+        stage.scale({x: newScale, y: newScale})
+        stage.position(newPosition)
         stage.batchDraw()
+
+        setScale(newScale)
     }
 
     const handleAddCircle = () => {
@@ -54,17 +60,22 @@ export default function Canvas () {
         const pointerPosition = stage.getPointerPosition()
         if(!pointerPosition) return;
 
+        const stageScale = stage.scaleX()
+        const stagePosition = stage.position()
+
+        const correctedX = (pointerPosition.x - stagePosition.x) / stageScale
+        const correctedY = (pointerPosition.y - stagePosition.y) / stageScale
+
         const newShape: TCircleShape = {
             id: `circle_${shapes.length + 1}`,
             type: selectedShape,
-            x: pointerPosition.x,
-            y: pointerPosition.y,
+            x: correctedX,
+            y: correctedY,
             size: 30,
             color: "black"
         }
 
         setShapes([...shapes, newShape])
-        console.log(shapes)
     }
 
     const handleDragMove = (evt:  KonvaEventObject<DragEvent>, id: string) => {
@@ -80,14 +91,14 @@ export default function Canvas () {
     return (
         <Stage
             ref={stageRef}
-            width={window.innerWidth}
-            height={window.innerHeight}
+            width={500}
+            height={500}
             draggable
             onWheel={handleWheel}
             onClick={handleAddCircle}
-            style={{backgroundColor: '#f4f4f4'}}
+            className="stage"
         >
-            <Layer>
+            <Layer classname="layer">
                 {renderShapes(shapes, handleDragMove)}
             </Layer>
         </Stage>
