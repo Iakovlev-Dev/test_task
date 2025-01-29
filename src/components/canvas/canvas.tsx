@@ -4,13 +4,14 @@ import {Layer, Stage} from "react-konva";
 import {TCircleShape, TShapeString} from "../../types/types";
 import {KonvaEventObject} from "konva/lib/Node";
 import {useAppSelector} from "../../types/type-store";
-import {selectShape, selectSize} from "../../store/data-process/selectors";
+import {selectColor, selectShape, selectSize} from "../../store/data-process/selectors";
 import {renderShapes} from "../../utils";
 
 export default function Canvas () {
   const stageRef = useRef<Konva.Stage>(null);
   const currentShape = useAppSelector(selectShape);
   const currentSize = useAppSelector(selectSize);
+  const currentColor = useAppSelector(selectColor);
 
   const [shapes, setShapes] = useState<TCircleShape[]>([]);
   const [selectedShape, setSelectedShape] = useState<TShapeString>(currentShape);
@@ -68,7 +69,7 @@ export default function Canvas () {
       x: correctedX,
       y: correctedY,
       size: +currentSize,
-      color: "black"
+      color: currentColor
     };
 
     setShapes([...shapes, newShape]);

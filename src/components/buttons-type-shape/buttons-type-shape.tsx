@@ -23,7 +23,8 @@ export default function ButtonsTypeShape() {
               type="radio"
               onChange={() => handleClick(shape as TShapeString)}
               checked={currentShape === shape}
-              name={shape}/>
+              name={shape}
+            />
             <span className="custom-radio__label">{Shapes[shape]}</span>
           </label>
         </div>

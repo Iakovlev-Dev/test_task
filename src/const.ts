@@ -7,3 +7,11 @@ export const Shapes: Record<string, string> = {
   rect: 'Квадрат',
   triangle: 'Треугольник'
 };
+
+export const Colors: Record<string, string> = {
+  red: 'Красный',
+  green: 'Зеленый',
+  yellow: 'Желтый',
+  blue: 'Голубой',
+  black: 'Черный',
+};

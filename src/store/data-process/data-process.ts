@@ -4,12 +4,14 @@ import {TShapeString} from "../../types/types";
 
 type TInitialState = {
   shape: TShapeString,
-  size: number
+  size: number,
+  color: string
 }
 
 const initialState: TInitialState = {
   shape: 'rect',
-  size: 50
+  size: 50,
+  color: 'red'
 };
 
 export const dataProcess = createSlice({
@@ -21,8 +23,11 @@ export const dataProcess = createSlice({
     },
     setSize( state, action: PayloadAction<number> ) {
       state.size = action.payload;
+    },
+    setColor( state, action: PayloadAction<string>) {
+      state.color = action.payload;
     }
   }
 });
 
-export const {setShape, setSize} = dataProcess.actions;
+export const {setShape, setSize, setColor} = dataProcess.actions;
