@@ -86,18 +86,21 @@ export default function Canvas () {
     }
 
     return (
-        <Stage
-            ref={stageRef}
-            width={500}
-            height={500}
-            draggable
-            onWheel={handleWheel}
-            onClick={handleAddCircle}
-            className="stage"
-        >
-            <Layer classname="layer">
-                {renderShapes(shapes, handleDragMove)}
-            </Layer>
-        </Stage>
+        <div className="canvas">
+            <Stage
+                ref={stageRef}
+                width={800}
+                height={600}
+                draggable
+                onWheel={handleWheel}
+                onClick={handleAddCircle}
+                className="stage"
+            >
+                <Layer classname="layer">
+                    {renderShapes(shapes, handleDragMove)}
+                </Layer>
+            </Stage>
+        </div>
+
     )
 }

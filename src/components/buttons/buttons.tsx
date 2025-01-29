@@ -1,15 +1,31 @@
 import React from "react";
 import {setShape} from "../../store/data-process/data-process";
 import {Shapes} from "../../const";
-import {useAppDispatch} from "../../types/type-store";
+import {useAppDispatch, useAppSelector} from "../../types/type-store";
+import {selectShape} from "../../store/data-process/selectors";
 
 export default function Buttons () {
     const dispatch = useAppDispatch()
+    const handleClick = (shape: string) => {
+        dispatch(setShape(shape))
+    }
+    const currentShape = useAppSelector(selectShape)
+
     return (
         <div className="buttons">
-            {Object.keys(Shapes).map((shape) => (
-                <button className="button" onClick={() => dispatch(setShape(shape))} key={shape}>{Shapes[shape]}</button>
-            ))}
+            <fieldset>
+                <legend>Тип фигуры</legend>
+                {Object.keys(Shapes).map((shape) => (
+                    <label key={shape}>
+                        <input className="button"
+                               type="radio"
+                               onChange={() => handleClick(shape)}
+                               checked={currentShape === shape}
+                               name={shape}/>
+                        <span className="custom-radio__label">{Shapes[shape]}</span>
+                    </label>
+                ))}
+            </fieldset>
         </div>
     )
 }

@@ -5,12 +5,30 @@ body {
 }
 
 .app {
-
+    margin: 50px;
     justify-content: center;
     align-items: center;
     height: 100vh;
 }
 
+.app-container {
+    display: flex;
+}
+
+.buttons {
+    margin-left: 50px;
+}
+
 .button {
     height: 30px;
+}
+
+.canvas {
+    border: 1px solid black;
+    width: 800px;
+    height: 600px;
+}
+
+.stage {
+    background-color: #f4f4f4;
 }
