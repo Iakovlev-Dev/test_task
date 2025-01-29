@@ -2,19 +2,19 @@ import {useEffect, useRef, useState} from "react";
 import Konva from "konva";
 import {Layer, Stage} from "react-konva";
 import React from "react";
-import {TCircleShape, TShape} from "../../types/types";
+import {TCircleShape, TShapeString} from "../../types/types";
 import {KonvaEventObject} from "konva/lib/Node";
 import {useAppSelector} from "../../types/type-store";
-import {selectShape} from "../../store/data-process/selectors";
-import {setShape} from "../../store/data-process/data-process";
+import {selectShape, selectSize} from "../../store/data-process/selectors";
 import {renderShapes} from "../../utils";
 
 export default function Canvas () {
   const stageRef = useRef<Konva.Stage>(null);
   const currentShape = useAppSelector(selectShape);
+  const currentSize = useAppSelector(selectSize);
 
   const [shapes, setShapes] = useState<TCircleShape[]>([]);
-  const [selectedShape, setSelectedShape] = useState<TShape>(currentShape);
+  const [selectedShape, setSelectedShape] = useState<TShapeString>(currentShape);
 
   useEffect(() => {
     setSelectedShape(currentShape);
@@ -68,7 +68,7 @@ export default function Canvas () {
       type: selectedShape,
       x: correctedX,
       y: correctedY,
-      size: 30,
+      size: +currentSize,
       color: "black"
     };
 
@@ -78,7 +78,7 @@ export default function Canvas () {
   const handleDragMove = (evt:  KonvaEventObject<DragEvent>, id: string) => {
     const {x, y} = evt.target.position();
 
-    setShape((prevShapes: TCircleShape[]) =>
+    setShapes((prevShapes: TCircleShape[]) =>
       prevShapes.map((shape) =>
         shape.id === id ? { ...shape, x, y} : shape
       )

@@ -1,30 +1,49 @@
-import React from "react";
-import {setShape} from "../../store/data-process/data-process";
-import {Shapes} from "../../const";
+import React, {useState} from "react";
+import {setSize} from "../../store/data-process/data-process";
 import {useAppDispatch, useAppSelector} from "../../types/type-store";
-import {selectShape} from "../../store/data-process/selectors";
+import {selectSize} from "../../store/data-process/selectors";
+import ButtonsTypeShape from "../buttons-type-shape/buttons-type-shape";
+
 
 export default function Buttons () {
   const dispatch = useAppDispatch();
-  const handleClick = (item: string) => {
-    dispatch(setShape(item));
+
+  const currentSize = useAppSelector(selectSize);
+
+  const [inputSize, setInputSize] = useState<string>(currentSize.toString());
+
+  const handleChangeSize = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    let {value} = evt.currentTarget;
+    setInputSize(value === '' ? '': value);
   };
-  const currentShape = useAppSelector(selectShape);
+
+  const handleClickApply = () => {
+    if (inputSize != null) {
+      dispatch(setSize(Number(inputSize)));
+    }
+  };
 
   return (
     <div className="buttons">
+      <ButtonsTypeShape />
       <fieldset>
-        <legend>Тип фигуры</legend>
-        {Object.keys(Shapes).map((shape) => (
-          <label key={shape}>
+        <legend>Размер</legend>
+        <div className="buttons-group">
+          <label className="custom-label">
             <input className="button"
-              type="radio"
-              onChange={() => handleClick(shape)}
-              checked={currentShape === shape}
-              name={shape}/>
-            <span className="custom-radio__label">{Shapes[shape]}</span>
+              type="number"
+              name="size"
+              placeholder={'30'}
+              value={+inputSize === 0 ? '': inputSize}
+              onChange={(evt) => handleChangeSize(evt)}
+            />
+            <button
+              className="custom-radio__label"
+              onClick={handleClickApply}
+            >Применить</button>
           </label>
-        ))}
+        </div>
+
       </fieldset>
     </div>
   );
