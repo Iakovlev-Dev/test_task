@@ -12,6 +12,6 @@ export const Colors: Record<string, string> = {
   red: 'Красный',
   green: 'Зеленый',
   yellow: 'Желтый',
-  blue: 'Голубой',
+  blue: 'Синий',
   black: 'Черный',
 };
