@@ -1,7 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import Konva from "konva";
 import {Layer, Stage} from "react-konva";
-import React from "react";
 import {TCircleShape, TShapeString} from "../../types/types";
 import {KonvaEventObject} from "konva/lib/Node";
 import {useAppSelector} from "../../types/type-store";
