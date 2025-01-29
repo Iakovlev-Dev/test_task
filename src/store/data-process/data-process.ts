@@ -1,17 +1,19 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {NameSpace} from "../../const";
-import {TShapeString} from "../../types/types";
+import {TCircleShape, TShapeString} from "../../types/types";
 
 type TInitialState = {
   shape: TShapeString,
   size: number,
-  color: string
+  color: string,
+  shapes: TCircleShape[],
 }
 
 const initialState: TInitialState = {
   shape: 'rect',
   size: 50,
-  color: 'red'
+  color: 'red',
+  shapes: []
 };
 
 export const dataProcess = createSlice({
@@ -26,8 +28,11 @@ export const dataProcess = createSlice({
     },
     setColor( state, action: PayloadAction<string>) {
       state.color = action.payload;
+    },
+    setShapesState(state, action: PayloadAction<TCircleShape[]>) {
+      state.shapes = action.payload;
     }
   }
 });
 
-export const {setShape, setSize, setColor} = dataProcess.actions;
+export const {setShape, setSize, setColor, setShapesState} = dataProcess.actions;

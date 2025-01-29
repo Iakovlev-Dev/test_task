@@ -1,24 +1,21 @@
-import {useEffect, useRef, useState} from "react";
+import {useRef} from "react";
 import Konva from "konva";
 import {Layer, Stage} from "react-konva";
-import {TCircleShape, TShapeString} from "../../types/types";
+import {TCircleShape} from "../../types/types";
 import {KonvaEventObject} from "konva/lib/Node";
-import {useAppSelector} from "../../types/type-store";
-import {selectColor, selectShape, selectSize} from "../../store/data-process/selectors";
+import {useAppDispatch, useAppSelector} from "../../types/type-store";
+import {selectColor, selectShape, selectShapes, selectSize} from "../../store/data-process/selectors";
 import {renderShapes} from "../../utils";
+import {setShapesState} from "../../store/data-process/data-process";
 
 export default function Canvas () {
+  const dispatch = useAppDispatch();
+
   const stageRef = useRef<Konva.Stage>(null);
   const currentShape = useAppSelector(selectShape);
   const currentSize = useAppSelector(selectSize);
   const currentColor = useAppSelector(selectColor);
-
-  const [shapes, setShapes] = useState<TCircleShape[]>([]);
-  const [selectedShape, setSelectedShape] = useState<TShapeString>(currentShape);
-
-  useEffect(() => {
-    setSelectedShape(currentShape);
-  }, [currentShape]);
+  const shapes = useAppSelector(selectShapes);
 
   const handleWheel = (evt: KonvaEventObject<WheelEvent>) => {
     evt.evt.preventDefault();
@@ -65,24 +62,24 @@ export default function Canvas () {
 
     const newShape: TCircleShape = {
       id: `circle_${shapes.length + 1}`,
-      type: selectedShape,
+      type: currentShape,
       x: correctedX,
       y: correctedY,
       size: +currentSize,
       color: currentColor
     };
 
-    setShapes([...shapes, newShape]);
+    dispatch(setShapesState([...shapes, newShape]));
   };
 
   const handleDragMove = (evt:  KonvaEventObject<DragEvent>, id: string) => {
     const {x, y} = evt.target.position();
 
-    setShapes((prevShapes: TCircleShape[]) =>
-      prevShapes.map((shape) =>
-        shape.id === id ? { ...shape, x, y} : shape
-      )
-    );
+    const newShapesArray = [...shapes].map((shape)=> (
+      shape.id === id ? {...shape, x, y} : shape
+    ));
+
+    dispatch(setShapesState(newShapesArray));
   };
 
   return (
@@ -101,6 +98,5 @@ export default function Canvas () {
         </Layer>
       </Stage>
     </div>
-
   );
 }

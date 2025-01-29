@@ -1,4 +1,4 @@
-import {Colors, Shapes} from "../../const";
+import {Colors} from "../../const";
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../../types/type-store";
 import {selectColor} from "../../store/data-process/selectors";

@@ -10,6 +10,7 @@ export default function Buttons () {
       <ButtonsTypeShape />
       <ButtonsSize />
       <ButtonsColor />
+      <button className="button-reset">Очистить холст</button>
     </div>
   );
 }
