@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState, WheelEventHandler} from "react";
+import {useEffect, useRef, useState} from "react";
 import Konva from "konva";
 import {Layer, Stage} from "react-konva";
 import React from "react";
@@ -15,13 +15,12 @@ export default function Canvas () {
 
     const [shapes, setShapes] = useState<TCircleShape[]>([])
     const [selectedShape, setSelectedShape] = useState<TShape>(currentShape)
-    const [scale, setScale] = useState(1)
 
     useEffect(() => {
         setSelectedShape(currentShape)
     }, [currentShape]);
 
-    const handleWheel = (evt: any) => {
+    const handleWheel = (evt: KonvaEventObject<WheelEvent>) => {
         evt.evt.preventDefault()
         const scaleBy = 1.1;
         const stage = stageRef.current
@@ -49,8 +48,6 @@ export default function Canvas () {
         stage.scale({x: newScale, y: newScale})
         stage.position(newPosition)
         stage.batchDraw()
-
-        setScale(newScale)
     }
 
     const handleAddCircle = () => {
