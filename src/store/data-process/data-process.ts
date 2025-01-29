@@ -7,17 +7,17 @@ type TInitialState = {
 }
 
 const initialState: TInitialState = {
-    shape: 'circle'
-}
+  shape: 'circle'
+};
 
 export const dataProcess = createSlice({
-    name: NameSpace.Data,
-    initialState,
-    reducers: {
-        setShape( state, action) {
-            state.shape = action.payload;
-        }
+  name: NameSpace.Data,
+  initialState,
+  reducers: {
+    setShape( state, action) {
+      state.shape = action.payload;
     }
-})
+  }
+});
 
-export const {setShape} = dataProcess.actions
+export const {setShape} = dataProcess.actions;

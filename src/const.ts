@@ -3,7 +3,7 @@ export enum NameSpace {
 }
 
 export const Shapes: Record<string, string> = {
-    circle: 'Круг',
-    rect: 'Квадрат',
-    triangle: 'Треугольник'
-}
+  circle: 'Круг',
+  rect: 'Квадрат',
+  triangle: 'Треугольник'
+};
